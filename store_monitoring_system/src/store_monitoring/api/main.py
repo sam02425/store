@@ -4,6 +4,8 @@ from ..models.database import Customer, Product, Inventory, CartItem, Planogram
 from ..utils.db_utils import get_db_session
 from pydantic import BaseModel
 from typing import List
+from ..config import config
+
 
 app = FastAPI()
 
@@ -89,4 +91,4 @@ def get_planogram(aisle_id: str, db: Session = Depends(get_db_session)):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=config.API_HOST, port=config.API_PORT)

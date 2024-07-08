@@ -10,3 +10,5 @@ ultralytics
 sentence-transformers
 pydantic
 python-dotenv
+alembic
+pytest

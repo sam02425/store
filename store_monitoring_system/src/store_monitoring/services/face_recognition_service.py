@@ -7,14 +7,15 @@ from ..utils.kafka_utils import KafkaProducer, KafkaConsumer
 from ..utils.redis_utils import RedisClient
 from ..utils.db_utils import get_db_session
 import base64
+from ..config import config
 
 class FaceRecognitionService:
     def __init__(self):
-        self.face_detector = YOLO('yolov8n-face.pt')
-        self.face_recognizer = SentenceTransformer('clip-ViT-B-32')
-        self.kafka_consumer = KafkaConsumer('store_video_stream')
-        self.kafka_producer = KafkaProducer()
-        self.redis_client = RedisClient()
+        self.face_detector = YOLO(config.FACE_DETECTION_MODEL)
+        self.face_recognizer = SentenceTransformer(config.FACE_RECOGNITION_MODEL)
+        self.kafka_consumer = KafkaConsumer('store_video_stream', bootstrap_servers=config.KAFKA_BOOTSTRAP_SERVERS)
+        self.kafka_producer = KafkaProducer(bootstrap_servers=config.KAFKA_BOOTSTRAP_SERVERS)
+        self.redis_client = RedisClient(host=config.REDIS_HOST, port=config.REDIS_PORT)
         self.db_session = get_db_session()
 
     def process_frame(self, frame):

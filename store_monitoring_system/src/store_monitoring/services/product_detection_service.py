@@ -5,12 +5,13 @@ from ..models.database import CartItem, Product
 from ..utils.kafka_utils import KafkaProducer, KafkaConsumer
 from ..utils.db_utils import get_db_session
 import base64
+from ..config import config
 
 class ProductDetectionService:
     def __init__(self):
-        self.product_detector = YOLO('yolov8x.pt')  # Using YOLOv8x for high accuracy
-        self.kafka_consumer = KafkaConsumer('checkout_video_stream')
-        self.kafka_producer = KafkaProducer()
+        self.product_detector = YOLO(config.PRODUCT_DETECTION_MODEL)
+        self.kafka_consumer = KafkaConsumer('checkout_video_stream', bootstrap_servers=config.KAFKA_BOOTSTRAP_SERVERS)
+        self.kafka_producer = KafkaProducer(bootstrap_servers=config.KAFKA_BOOTSTRAP_SERVERS)
         self.db_session = get_db_session()
 
     def detect_products(self, frame):

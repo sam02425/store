@@ -3,13 +3,14 @@ import numpy as np
 from ultralytics import YOLO
 from ..utils.kafka_utils import KafkaProducer, KafkaConsumer
 import base64
+from ..config import config
 
 class CustomerTrackingService:
     def __init__(self):
-        self.person_detector = YOLO('yolov8n.pt')
+        self.person_detector = YOLO(config.PERSON_DETECTION_MODEL)
         self.tracker = cv2.TrackerKCF_create()
-        self.kafka_consumer = KafkaConsumer('store_video_stream')
-        self.kafka_producer = KafkaProducer()
+        self.kafka_consumer = KafkaConsumer('store_video_stream', bootstrap_servers=config.KAFKA_BOOTSTRAP_SERVERS)
+        self.kafka_producer = KafkaProducer(bootstrap_servers=config.KAFKA_BOOTSTRAP_SERVERS)
 
     def initialize_tracker(self, frame):
         results = self.person_detector(frame)

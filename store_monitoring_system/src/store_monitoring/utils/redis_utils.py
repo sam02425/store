@@ -1,11 +1,9 @@
 import redis
-
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
+from ..config import config
 
 class RedisClient:
     def __init__(self):
-        self.client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT)
+        self.client = redis.Redis(host=config.REDIS_HOST, port=config.REDIS_PORT)
 
     def get(self, key):
         return self.client.get(key)

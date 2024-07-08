@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from ..models.database import Base
+from ..config import config
 
-DATABASE_URL = "postgresql://user:password@localhost/store_monitoring"
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(config.DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def init_db():
